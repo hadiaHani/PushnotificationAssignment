@@ -1,7 +1,5 @@
 package com.example.pushnotificationassignment;
 
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -9,6 +7,8 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+
+import androidx.appcompat.app.AppCompatActivity;
 
 import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
@@ -24,7 +24,7 @@ import org.json.JSONObject;
 import java.io.UnsupportedEncodingException;
 
 public class MainActivity extends AppCompatActivity {
-    EditText name,email,password;
+    EditText nameR,emailR,passwordR;
     TextView have_account;
     RequestQueue requestQueue;
     Button register_button;
@@ -34,11 +34,12 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        name = findViewById(R.id.txtName);
-        email = findViewById(R.id.register_email);
+        nameR = findViewById(R.id.txtNameL);
+        emailR = findViewById(R.id.register_email);
         have_account=findViewById(R.id.have_account);
-        password = findViewById(R.id.register_password);
+        passwordR = findViewById(R.id.register_password);
         register_button = findViewById(R.id.register_button);
+
 
     have_account.setOnClickListener(new View.OnClickListener() {
         @Override
@@ -49,20 +50,23 @@ public class MainActivity extends AppCompatActivity {
         }
     })
     ;
+
+
         register_button.setOnClickListener(new View.OnClickListener() {
 
             @Override
             public void onClick(View v) {
-
+                {
                 String data = "{" +
-                        "\"name\"" + ":" + "\"" + name.getText().toString() + "\"," +
-                        "\"email\"" + ":" + "\"" + email.getText().toString() + "\"," +
-                        "\"password\"" + ":" + "\"" + password.getText().toString() + "\"" +
+                        "\"name\"" + ":" + "\"" + nameR.getText().toString() + "\"," +
+                        "\"email\"" + ":" + "\"" + emailR.getText().toString() + "\"," +
+                        "\"password\"" + ":" + "\"" + passwordR.getText().toString() + "\"" +
                         "}";
 
                 Submit(data);
-                startActivity(new Intent(MainActivity.this,
-                        Home.class ));
+               startActivity(new Intent(MainActivity.this, Home.class ));
+                }
+
             }
         });
 
@@ -104,6 +108,5 @@ public class MainActivity extends AppCompatActivity {
         };
         requestQueue.add(stringRequest);
     }
-
 
 }

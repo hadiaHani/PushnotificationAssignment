@@ -18,7 +18,7 @@
         app:layout_constraintEnd_toEndOf="parent" />
 
     <EditText
-        android:id="@+id/txtName"
+        android:id="@+id/txtNameL"
         android:layout_width="374dp"
         android:layout_height="60dp"
         android:layout_marginEnd="16dp"

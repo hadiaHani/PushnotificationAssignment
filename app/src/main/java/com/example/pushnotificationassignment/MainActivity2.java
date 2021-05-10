@@ -9,6 +9,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
@@ -24,7 +25,7 @@ import org.json.JSONObject;
 import java.io.UnsupportedEncodingException;
 
 public class MainActivity2 extends AppCompatActivity {
-    EditText email,password;
+    EditText emailL,passwordL;
     RequestQueue requestQueue;
     Button login_button;
     TextView new_account;
@@ -33,9 +34,9 @@ public class MainActivity2 extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main2);
 
-        email = findViewById(R.id.login_email);
+        emailL = findViewById(R.id.login_email);
         new_account=findViewById(R.id.new_account);
-        password = findViewById(R.id.login_password);
+        passwordL = findViewById(R.id.login_password);
         login_button = findViewById(R.id.login_button);
 
         new_account.setOnClickListener(new View.OnClickListener() {
@@ -47,53 +48,56 @@ public class MainActivity2 extends AppCompatActivity {
         });
         login_button.setOnClickListener(new View.OnClickListener() {
 
-
           @Override
             public void onClick(View v) {
+                  String data = "{" +
+                          "\"email\"" + ":" + "\"" + emailL.getText().toString() + "\"," +
+                          "\"password\"" + ":" + "\"" + passwordL.getText().toString() + "\"" +
+                          "}";
 
-                String data = "{" +
-                        "\"email\"" + ":" + "\"" + email.getText().toString() + "\"," +
-                        "\"password\"" + ":" + "\"" + password.getText().toString() + "\"" +
-                        "}";
+                  Submit(data);
 
-                Submit(data);
+              startActivity(new Intent(MainActivity2.this, Home.class ));
 
-                startActivity(new Intent(MainActivity2.this,
-                        Home.class ));
-            }
-        });
+          }   });
     }
 
     private void Submit(String data) {
-        String savedata=data;
-        String URL="https://mcc-users-api.herokuapp.com/login";
-        requestQueue= Volley.newRequestQueue(getApplicationContext());
-        Log.d("TAG", "requestQueue: "+requestQueue);
-        StringRequest stringRequest=new StringRequest(Request.Method.POST, URL, new Response.Listener<String>() {
+        String savedata = data;
+        String URL = "https://mcc-users-api.herokuapp.com/login";
+        requestQueue = Volley.newRequestQueue(getApplicationContext());
+        Log.d("TAG", "requestQueue: " + requestQueue);
+        StringRequest stringRequest = new StringRequest(Request.Method.POST, URL, new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
                 try {
                     JSONObject objres = new JSONObject(response);
-                    Log.d("TAG", "onResponse: "+objres.toString());
+                    Log.d("TAG Login", "onResponse: " + objres.toString());
+                    Intent intent =new Intent(MainActivity2.this,Home.class);
+                    intent.putExtra("emailL",emailL.getText().toString());
+                    intent.putExtra("passwordL",passwordL.getText().toString());
+                    startActivity(intent);
                 } catch (JSONException e) {
-                    Log.d("TAG", "Server Error ");
+                    Log.d("TAG Login", "Server Error ");
                 }
             }
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                Log.d("TAG", "onErrorResponse: "+error);
+                Log.d("TAG", "onErrorResponse: " + error);
             }
-        })
-        {
+        }) {
             @Override
-            public String getBodyContentType(){return "application/json; charset=utf-8";}
+            public String getBodyContentType() {
+                return "application/json; charset=utf-8";
+            }
+
             @Override
             public byte[] getBody() throws AuthFailureError {
-                try{
-                    Log.d("TAG", "savedata: "+savedata);
-                    return savedata==null?null:savedata.getBytes("utf-8");
-                }catch(UnsupportedEncodingException uee){
+                try {
+                    Log.d("TAG Login", "savedata: " + savedata);
+                    return savedata == null ? null : savedata.getBytes("utf-8");
+                } catch (UnsupportedEncodingException uee) {
                     return null;
                 }
             }
@@ -101,8 +105,6 @@ public class MainActivity2 extends AppCompatActivity {
         requestQueue.add(stringRequest);
 
 
-
-
-
     }
+
 }
